@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宝可梦肉鸽 POKEROGUE</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23f4f4f4'/%3E%3Cpath d='M2 50 a48 48 0 0 1 96 0 z' fill='%23EE1515'/%3E%3Crect x='2' y='45' width='96' height='10' fill='%23222224'/%3E%3Ccircle cx='50' cy='50' r='13' fill='%23f4f4f4' stroke='%23222224' stroke-width='6'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/fusion-pixel-12px-proportional-sc@latest/index.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/screens.css">
+</head>
+<body data-theme="dark">
+  <main id="app">
+
+    <!-- ================= 资源加载屏 ================= -->
+    <section class="screen" data-screen="loading" aria-label="游戏资源加载中">
+      <div class="screen-deco" aria-hidden="true">
+        <div class="pokeball loading-ball loading-ball--1"></div>
+        <div class="pokeball pokeball--great loading-ball loading-ball--2"></div>
+        <div class="pokeball pokeball--ultra loading-ball loading-ball--3"></div>
+        <div class="pokeball loading-spinner"></div>
+      </div>
+      <div class="loading-box">
+        <div class="loading-visual">
+          <div class="sprite-skeleton loading-skeleton"></div>
+          <img class="loading-silhouette" alt="宝可梦剪影" hidden>
+        </div>
+        <h1 class="logo logo--loading">POKE<span>ROGUE</span></h1>
+        <p class="loading-title">宝可梦肉鸽 · 正在加载游戏资源</p>
+        <div class="ball-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="ball-progress-fill"></div>
+          <div class="pokeball pokeball--mini ball-progress-ball"></div>
+        </div>
+        <div class="loading-stats">
+          <span class="loading-percent">0%</span>
+          <span class="loading-count">0 / 0 张</span>
+        </div>
+        <p class="loading-tip">正在准备精灵球……</p>
+      </div>
+    </section>
+
+    <!-- ================= 登录 / 注册屏 ================= -->
+    <section class="screen" data-screen="auth" aria-label="登录或注册">
+      <div class="screen-deco" aria-hidden="true">
+        <div class="sprite-deco auth-deco-sprite--1" data-sprite="25"></div>
+        <div class="sprite-deco auth-deco-sprite--2" data-sprite="133"></div>
+        <div class="sprite-deco auth-deco-sprite--3" data-sprite="151"></div>
+        <div class="sprite-deco auth-deco-sprite--4" data-sprite="6"></div>
+        <div class="pokeball auth-ball auth-ball--1"></div>
+        <div class="pokeball pokeball--ultra auth-ball auth-ball--2"></div>
+      </div>
+
+      <div class="card auth-card">
+        <h1 class="logo auth-logo">POKE<span>ROGUE</span></h1>
+        <p class="auth-subtitle">训练家，准备好开始冒险了吗？</p>
+
+        <div class="auth-tabs" role="tablist" aria-label="登录或注册">
+          <button type="button" class="auth-tab active" data-tab="login" role="tab" aria-selected="true">登 录</button>
+          <button type="button" class="auth-tab" data-tab="register" role="tab" aria-selected="false">注 册</button>
+        </div>
+
+        <!-- 登录表单 -->
+        <form class="auth-panel active" data-form="login" novalidate>
+          <div class="form-field">
+            <label for="login-name">训练家名称</label>
+            <input class="input" id="login-name" name="nickname" type="text" maxlength="12" placeholder="输入你的训练家名称" autocomplete="username">
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="form-field">
+            <label for="login-pass">密码</label>
+            <input class="input" id="login-pass" name="password" type="password" maxlength="20" placeholder="输入密码" autocomplete="current-password">
+            <p class="field-error" hidden></p>
+          </div>
+          <button type="submit" class="btn-ball">
+            <span class="pokeball pokeball--mini" aria-hidden="true"></span>登录游戏
+          </button>
+        </form>
+
+        <!-- 注册表单 -->
+        <form class="auth-panel" data-form="register" novalidate>
+          <div class="form-field">
+            <label for="reg-name">训练家名称</label>
+            <input class="input" id="reg-name" name="nickname" type="text" maxlength="12" placeholder="2-12 位中文、英文、数字或下划线" autocomplete="username">
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="form-field">
+            <label for="reg-pass">密码</label>
+            <input class="input" id="reg-pass" name="password" type="password" maxlength="20" placeholder="8-20 位，需包含字母和数字" autocomplete="new-password">
+            <div class="strength-row">
+              <div class="strength-meter" aria-hidden="true">
+                <span class="strength-seg strength-seg--1"></span>
+                <span class="strength-seg strength-seg--2"></span>
+                <span class="strength-seg strength-seg--3"></span>
+                <span class="strength-seg strength-seg--4"></span>
+              </div>
+              <span class="strength-label"></span>
+            </div>
+            <p class="field-error" hidden></p>
+          </div>
+          <div class="form-field">
+            <label for="reg-confirm">确认密码</label>
+            <input class="input" id="reg-confirm" name="confirm" type="password" maxlength="20" placeholder="再次输入密码" autocomplete="new-password">
+            <p class="field-error" hidden></p>
+          </div>
+          <button type="submit" class="btn-ball">
+            <span class="pokeball pokeball--mini" aria-hidden="true"></span>注册成为训练家
+          </button>
+        </form>
+
+        <p class="auth-hint">※ 账号系统暂未接入服务器，输入任意信息即可进入游戏</p>
+      </div>
+    </section>
+
+    <!-- ================= 主菜单屏 ================= -->
+    <section class="screen" data-screen="menu" aria-label="游戏主菜单">
+      <div class="screen-deco" aria-hidden="true">
+        <div class="sprite-deco menu-deco-sprite--1" data-sprite="4"></div>
+        <div class="sprite-deco menu-deco-sprite--2" data-sprite="7"></div>
+        <div class="sprite-deco menu-deco-sprite--3" data-sprite="1"></div>
+        <div class="pokeball menu-ball menu-ball--1"></div>
+        <div class="pokeball pokeball--great menu-ball menu-ball--2"></div>
+      </div>
+      <div class="menu-wrap">
+        <header class="menu-header">
+          <h1 class="logo logo--menu">POKE<span>ROGUE</span></h1>
+          <p class="menu-greeting"><span class="menu-greet-word">欢迎回来，</span><span class="menu-nickname">训练家</span>！</p>
+        </header>
+        <div class="menu-cards"><!-- 由 menu.js 渲染 --></div>
+        <footer class="menu-footer">POKEROGUE v0.1.0 · 开发中 · 更多玩法即将上线</footer>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="toast-root" id="toast-root" aria-live="polite"></div>
+
+  <!-- 普通 defer 脚本，按序执行（file:// 下 ES modules 会被 CORS 拦截，故不用） -->
+  <script defer src="js/config.js"></script>
+  <script defer src="js/utils.js"></script>
+  <script defer src="js/screen-manager.js"></script>
+  <script defer src="js/sprite.js"></script>
+  <script defer src="js/loading.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/menu.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>

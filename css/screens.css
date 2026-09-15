@@ -1,0 +1,232 @@
+/* ============================================
+   screens.css — 三屏布局、切换过渡动画、每屏装饰
+   ============================================ */
+
+/* ---------- 屏幕容器与切换 ---------- */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  overflow-y: auto;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(1.02);
+  transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
+}
+.screen.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: scale(1);
+  transition: opacity .45s ease, transform .45s ease;
+}
+
+/* 屏幕内的装饰层（不可交互） */
+.screen-deco {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 装饰精灵图（低透明度、像素放大、轻微浮动） */
+.sprite-deco {
+  position: absolute;
+  opacity: .22;
+  z-index: 0;
+}
+.sprite-deco .deco-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-18px) rotate(6deg); }
+}
+
+/* ============================================
+   加载屏
+   ============================================ */
+.loading-box {
+  position: relative;
+  z-index: 1;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  width: min(480px, 92vw);
+}
+
+.loading-visual { position: relative; width: 160px; height: 160px; }
+.loading-skeleton { position: absolute; inset: 0; }
+.loading-silhouette {
+  position: absolute;
+  inset: 0;
+  width: 160px;
+  height: 160px;
+  image-rendering: pixelated;
+  filter: brightness(0); /* 彩色精灵压成纯黑剪影 */
+}
+
+.logo--loading { font-size: clamp(20px, 5vw, 30px); }
+.loading-title { color: var(--text-muted); font-size: 14px; }
+.loading-stats { display: flex; align-items: baseline; gap: 12px; }
+.loading-percent { font-family: var(--font-pixel); font-size: 16px; color: var(--pk-yellow); }
+.loading-count { font-size: 13px; color: var(--text-muted); }
+.loading-tip { color: var(--text-muted); font-size: 13.5px; min-height: 22px; }
+
+/* 加载屏装饰球 */
+.loading-ball { position: absolute; opacity: .1; }
+.loading-ball--1 { left: 12%; top: 16%; --ball-size: 96px; animation: floaty 5s ease-in-out infinite; }
+.loading-ball--2 { right: 9%; bottom: 20%; --ball-size: 66px; animation: floaty 6s ease-in-out 1s infinite; }
+.loading-ball--3 { right: 26%; top: 10%; --ball-size: 46px; animation: floaty 4.5s ease-in-out .5s infinite; }
+
+.loading-spinner {
+  position: absolute;
+  right: 7%;
+  top: 50%;
+  --ball-size: 130px;
+  opacity: .22;
+  animation: spin-ball 3.5s linear infinite;
+}
+@keyframes spin-ball {
+  from { transform: translateY(-50%) rotate(0); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+@media (max-width: 900px) { .loading-spinner { display: none; } }
+
+/* ============================================
+   登录 / 注册屏
+   ============================================ */
+.auth-card {
+  position: relative;
+  z-index: 1;
+  margin: auto;
+  width: min(420px, 94vw);
+  padding: 28px 30px 24px;
+}
+.auth-logo { font-size: 20px; text-align: center; display: block; }
+.auth-subtitle { text-align: center; color: var(--text-muted); font-size: 13px; margin: 6px 0 20px; }
+
+.auth-tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+.auth-tab {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  border-bottom: 3px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 15px;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+.auth-tab:hover { color: var(--text); }
+.auth-tab.active { color: var(--text); font-weight: 700; }
+/* 激活态属性色：登录=水系蓝，注册=火系红 */
+.auth-tab[data-tab="login"].active { border-color: var(--type-water); }
+.auth-tab[data-tab="register"].active { border-color: var(--type-fire); }
+
+.auth-panel { display: none; flex-direction: column; gap: 15px; }
+.auth-panel.active { display: flex; }
+
+.auth-hint { margin-top: 16px; font-size: 12px; color: var(--text-muted); text-align: center; }
+
+/* 登录屏装饰 */
+.auth-deco-sprite--1 { left: 5%; top: 14%; width: 140px; height: 140px; animation: floaty 5s ease-in-out infinite; }
+.auth-deco-sprite--2 { right: 6%; top: 11%; width: 120px; height: 120px; animation: floaty 6s ease-in-out 1.2s infinite; }
+.auth-deco-sprite--3 { left: 9%; bottom: 9%; width: 110px; height: 110px; animation: floaty 4.5s ease-in-out .6s infinite; }
+.auth-deco-sprite--4 { right: 11%; bottom: 13%; width: 130px; height: 130px; animation: floaty 5.5s ease-in-out 1.8s infinite; }
+.auth-ball { position: absolute; opacity: .12; }
+.auth-ball--1 { left: 6%; bottom: 26%; --ball-size: 56px; animation: floaty 5s ease-in-out 2s infinite; }
+.auth-ball--2 { right: 7%; top: 30%; --ball-size: 44px; animation: floaty 6s ease-in-out .8s infinite; }
+
+@media (max-width: 700px) {
+  .auth-deco-sprite--3, .auth-deco-sprite--4 { display: none; }
+}
+
+/* ============================================
+   主菜单屏
+   ============================================ */
+.menu-wrap {
+  position: relative;
+  z-index: 1;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  padding: 20px 0;
+}
+
+.menu-header { text-align: center; }
+.logo--menu { font-size: clamp(22px, 5vw, 32px); }
+.menu-greeting { margin-top: 10px; color: var(--text-muted); font-size: 15px; }
+.menu-nickname { color: var(--pk-yellow); font-weight: 700; }
+
+.menu-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: min(560px, 92vw);
+}
+
+.menu-card {
+  --accent: var(--pk-blue);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 22px 14px 18px;
+  color: var(--text);
+  font-family: var(--font-body);
+  text-align: center;
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+.menu-card:hover:not(:disabled) {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .4);
+}
+.menu-card:disabled { opacity: .45; cursor: not-allowed; }
+
+.menu-card-icon { width: 76px; height: 76px; }
+.menu-card-sprite { width: 100%; height: 100%; image-rendering: pixelated; }
+.menu-card-title { font-size: 17px; font-weight: 700; }
+.menu-card-desc { font-size: 12.5px; color: var(--text-muted); }
+
+.menu-card-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--type-psychic);
+  color: #fff;
+  font-size: 11px;
+}
+
+.menu-footer { color: var(--text-muted); font-size: 12px; text-align: center; }
+
+/* 主菜单装饰 */
+.menu-deco-sprite--1 { left: 4%; top: 12%; width: 110px; height: 110px; animation: floaty 5.5s ease-in-out infinite; }
+.menu-deco-sprite--2 { right: 4%; top: 14%; width: 100px; height: 100px; animation: floaty 6s ease-in-out 1s infinite; }
+.menu-deco-sprite--3 { left: 8%; bottom: 10%; width: 100px; height: 100px; animation: floaty 5s ease-in-out .5s infinite; }
+.menu-ball { position: absolute; opacity: .12; }
+.menu-ball--1 { left: 12%; top: 34%; --ball-size: 60px; animation: floaty 5s ease-in-out 1.6s infinite; }
+.menu-ball--2 { right: 13%; bottom: 30%; --ball-size: 48px; animation: floaty 6s ease-in-out .4s infinite; }
+
+@media (max-width: 560px) {
+  .menu-cards { grid-template-columns: 1fr; }
+  .menu-deco-sprite--1, .menu-deco-sprite--2, .menu-deco-sprite--3 { opacity: .12; }
+}

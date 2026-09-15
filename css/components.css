@@ -1,0 +1,238 @@
+/* ============================================
+   components.css — 精灵球、按钮、卡片、表单、进度条、toast、占位组件
+   ============================================ */
+
+/* ---------- 精灵球（纯 CSS） ---------- */
+.pokeball {
+  --ball-size: 64px;
+  --ball-top: var(--pk-red);
+  width: var(--ball-size);
+  height: var(--ball-size);
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  background: linear-gradient(to bottom,
+    var(--ball-top) 0 44%,
+    var(--pk-dark) 44% 56%,
+    #f4f4f4 56% 100%);
+  box-shadow: inset -4px -6px 10px rgba(0, 0, 0, .35), 0 4px 14px rgba(0, 0, 0, .45);
+}
+.pokeball::before { /* 中心圆按钮 */
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26%;
+  height: 26%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #f4f4f4;
+  border: 3px solid var(--pk-dark);
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, .25);
+}
+.pokeball::after { /* 左上高光 */
+  content: '';
+  position: absolute;
+  left: 17%;
+  top: 11%;
+  width: 22%;
+  height: 15%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .55);
+  filter: blur(1px);
+}
+.pokeball--mini { --ball-size: 22px; }
+.pokeball--great { --ball-top: #4C9BE8; }
+.pokeball--ultra { --ball-top: #E6C229; }
+
+/* ---------- 精灵球按钮 ---------- */
+.btn-ball {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 24px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 1px 2px 0 rgba(0, 0, 0, .75);
+  background: linear-gradient(to bottom, var(--pk-red) 0 38%, var(--pk-dark) 38% 62%, #f4f4f4 62% 100%);
+  box-shadow: inset -3px -5px 8px rgba(0, 0, 0, .3), var(--shadow);
+  transition: transform var(--transition), filter var(--transition), box-shadow var(--transition);
+}
+.btn-ball:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: inset -3px -5px 8px rgba(0, 0, 0, .3), 0 12px 28px rgba(0, 0, 0, .45);
+}
+.btn-ball:active { transform: scale(.96); }
+.btn-ball:disabled { opacity: .5; cursor: not-allowed; }
+.btn-ball:hover .pokeball--mini { animation: wobble .8s ease-in-out; }
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-16deg); }
+  75% { transform: rotate(10deg); }
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- 精灵球主题进度条 ---------- */
+.ball-progress {
+  position: relative;
+  width: min(420px, 78vw);
+  height: 16px;
+  background: var(--bg-elev);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+}
+.ball-progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--pk-red) 0 55%, #f4f4f4 100%);
+  transition: width .2s ease;
+}
+.ball-progress-ball {
+  position: absolute;
+  top: 50%;
+  left: 1.5%;
+  transform: translate(-50%, -50%);
+  transition: left .2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .55);
+}
+
+/* ---------- 表单 ---------- */
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+.form-field label { font-size: 14px; color: var(--text-muted); }
+
+.input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elev);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.input::placeholder { color: var(--text-muted); opacity: .65; }
+.input:focus { border-color: var(--pk-blue); box-shadow: 0 0 0 3px rgba(59, 76, 202, .22); }
+.input.invalid { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(229, 72, 77, .18); }
+
+.field-error { font-size: 12.5px; color: var(--danger); }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+.shake { animation: shake .3s ease; }
+
+/* 密码强度条（弱→强：草→电→火→龙） */
+.strength-row { display: flex; align-items: center; gap: 10px; }
+.strength-meter { display: flex; flex: 1; gap: 6px; }
+.strength-seg {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  transition: background .25s ease, border-color .25s ease;
+}
+.strength-seg.on { border-color: transparent; }
+.strength-seg--1.on { background: var(--type-grass); }
+.strength-seg--2.on { background: var(--type-electric); }
+.strength-seg--3.on { background: var(--type-fire); }
+.strength-seg--4.on { background: var(--type-dragon); }
+.strength-label { font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
+
+/* ---------- Toast ---------- */
+.toast-root {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 20px;
+  max-width: min(420px, 88vw);
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-left: 6px solid var(--pk-yellow);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  font-size: 14px;
+  animation: toast-in .3s ease;
+}
+.toast--leaving { animation: toast-out .3s ease forwards; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes toast-out {
+  to { opacity: 0; transform: translateY(-14px); }
+}
+
+/* ---------- 剪影 / 骨架占位 ---------- */
+.pkm-silhouette {
+  --sprite-size: 96px;
+  width: var(--sprite-size);
+  height: var(--sprite-size);
+  border-radius: 50%;
+  background: var(--silhouette-bg);
+  border: 2px dashed var(--border);
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-pixel);
+  font-size: 20px;
+  user-select: none;
+}
+.pkm-silhouette::before { content: '?'; }
+
+.sprite-skeleton {
+  background: linear-gradient(90deg, var(--bg-elev) 25%, var(--surface) 37%, var(--bg-elev) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 16px;
+}
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* ---------- 通用入场 / 轮换动画 ---------- */
+.swap { animation: fade-slide-in .35s ease; }
+@keyframes fade-slide-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}

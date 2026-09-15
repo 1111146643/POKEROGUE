@@ -1,0 +1,109 @@
+/* ============================================
+   base.css — reset、CSS 变量（属性色板 / 主题）、通用工具类
+   ============================================ */
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background:
+    radial-gradient(1100px 560px at 82% -12%, rgba(59, 76, 202, .22), transparent 60%),
+    radial-gradient(900px 520px at -8% 108%, rgba(238, 21, 21, .16), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; }
+img { max-width: 100%; display: block; }
+
+::selection { background: var(--pk-yellow); color: var(--pk-dark); }
+
+/* ---------- 主题变量 ---------- */
+:root {
+  /* 品牌色 */
+  --pk-red: #EE1515;
+  --pk-dark: #222224;
+  --pk-yellow: #FFCB05;
+  --pk-blue: #3B4CCA;
+
+  /* 18 种属性色 */
+  --type-normal: #A8A878;
+  --type-fire: #F08030;
+  --type-water: #6890F0;
+  --type-electric: #F8D030;
+  --type-grass: #78C850;
+  --type-ice: #98D8D8;
+  --type-fighting: #C03028;
+  --type-poison: #A040A0;
+  --type-ground: #E0C068;
+  --type-flying: #A890F0;
+  --type-psychic: #F85888;
+  --type-bug: #A8B820;
+  --type-rock: #B8A038;
+  --type-ghost: #705898;
+  --type-dragon: #7038F8;
+  --type-dark: #705848;
+  --type-steel: #B8B8D0;
+  --type-fairy: #EE99AC;
+
+  /* 深色主题（默认） */
+  --bg: #14162b;
+  --bg-elev: #1b1e38;
+  --surface: #232544;
+  --text: #eaeaf2;
+  --text-muted: #9a9dc4;
+  --border: #3a3e6b;
+  --danger: #E5484D;
+  --ok: #46A758;
+  --silhouette-bg: rgba(255, 255, 255, .05);
+
+  --radius: 12px;
+  --shadow: 0 8px 24px rgba(0, 0, 0, .35);
+  --transition: .3s ease;
+
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-body: 'Fusion Pixel 12px Proportional SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+}
+
+/* 浅色主题（机制已建好，后续设置页接入开关） */
+body[data-theme="light"] {
+  --bg: #f2f4fb;
+  --bg-elev: #ffffff;
+  --surface: #ffffff;
+  --text: #22243c;
+  --text-muted: #6a6e8f;
+  --border: #d9dcf0;
+  --shadow: 0 8px 24px rgba(60, 64, 110, .12);
+  --silhouette-bg: rgba(0, 0, 0, .05);
+}
+
+/* ---------- 通用工具类 ---------- */
+.logo {
+  font-family: var(--font-pixel);
+  color: var(--pk-yellow);
+  text-shadow: 3px 3px 0 var(--pk-blue), 0 0 24px rgba(255, 203, 5, .3);
+  letter-spacing: 1px;
+  user-select: none;
+}
+.logo span { color: var(--text); }
+
+.pixel-img { image-rendering: pixelated; }
+
+/* ---------- 无障碍：减弱动态效果 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
