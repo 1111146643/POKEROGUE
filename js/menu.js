@@ -9,7 +9,7 @@ PKR.Menu = (() => {
   function onClick(item) {
     switch (item.id) {
       case 'new-game': PKR.toast.show('新的冒险正在开发中，敬请期待！'); break;
-      case 'pokedex': PKR.toast.show('宝可梦图鉴正在开发中，敬请期待！'); break;
+      case 'pokedex': PKR.ScreenManager.go('pokedex'); break;
       case 'settings': PKR.toast.show('设置功能正在开发中，敬请期待！'); break;
       default: break;
     }

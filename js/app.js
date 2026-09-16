@@ -17,6 +17,7 @@ window.PKR = window.PKR || {};
   PKR.Loading.init();
   PKR.Auth.init();
   PKR.Menu.init();
+  PKR.Pokedex.init();
 
   PKR.ScreenManager.go('loading');
 })();

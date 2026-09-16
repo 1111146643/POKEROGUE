@@ -230,3 +230,380 @@
   .menu-cards { grid-template-columns: 1fr; }
   .menu-deco-sprite--1, .menu-deco-sprite--2, .menu-deco-sprite--3 { opacity: .12; }
 }
+
+/* ============================================
+   宝可梦图鉴（信息界面）
+   ============================================ */
+.pokedex-wrap {
+  position: relative;
+  z-index: 1;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  width: min(960px, 96vw);
+}
+
+.pokedex-header { display: flex; align-items: center; gap: 16px; width: min(900px, 94vw); }
+.btn-back { width: auto; padding: 8px 18px; font-size: 14px; }
+.pokedex-title {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--pk-yellow);
+  text-shadow: 2px 2px 0 var(--pk-blue);
+  letter-spacing: 2px;
+}
+
+/* 搜索与结果浮层 */
+.pokedex-search { position: relative; width: min(900px, 94vw); }
+.pokedex-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  max-height: 320px;
+  overflow-y: auto;
+  list-style: none;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 6px;
+}
+.pokedex-result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.pokedex-result:hover { background: var(--bg-elev); }
+.pokedex-result--none { cursor: default; color: var(--text-muted); }
+.pokedex-result-sprite { width: 40px; height: 40px; image-rendering: pixelated; }
+.pokedex-result-no { font-family: var(--font-pixel); font-size: 11px; color: var(--text-muted); min-width: 56px; }
+.pokedex-result-name { flex: 1; font-weight: 600; }
+.pokedex-result-types { display: flex; gap: 5px; }
+.pokedex-result-type { width: 12px; height: 12px; border-radius: 50%; }
+
+/* 加载态与空态 */
+.pokedex-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.pokedex-loading-skeleton { width: 80px; height: 80px; }
+.pokedex-empty { color: var(--text-muted); font-size: 14px; padding: 40px 0; }
+
+/* ---------- 详情面板 ---------- */
+.pokedex-detail { width: min(900px, 94vw); }
+.pd-main { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 16px; align-items: start; }
+
+.pd-sprite-panel {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 14px 12px;
+}
+.pd-sprite { position: relative; width: 160px; height: 160px; }
+.pd-sprite-img { width: 160px; height: 160px; image-rendering: pixelated; }
+.pd-shiny-badge {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .4);
+  z-index: 1;
+}
+.shiny-badge--yellow { background: #C9A400; }
+.shiny-badge--blue { background: #3B6FC8; }
+.shiny-badge--red { background: var(--pk-red); }
+
+/* 闪光占位滤镜（后续替换为真实素材时仅换 URL） */
+.shiny-filter--yellow { filter: sepia(1) saturate(4.5) hue-rotate(-12deg); }
+.shiny-filter--blue { filter: sepia(1) saturate(5) hue-rotate(155deg) brightness(1.05); }
+.shiny-filter--red { filter: sepia(1) saturate(6.5) hue-rotate(-42deg); }
+
+.pd-shiny-tabs { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.pd-shiny-tab {
+  padding: 5px 12px;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+.pd-shiny-tab:hover { color: var(--text); }
+.pd-shiny-tab.active { color: #fff; background: var(--pk-blue); border-color: var(--pk-blue); }
+.pd-shiny-note { font-size: 11px; color: var(--text-muted); text-align: center; }
+
+/* 头部：编号 / 名称 / 糖果 */
+.pd-head { grid-column: 2; }
+.pd-no { font-family: var(--font-pixel); font-size: 12px; color: var(--text-muted); }
+.pd-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 26px;
+  margin: 2px 0 8px;
+}
+.pd-candy-icon {
+  --fill: 0;
+  position: relative;
+  display: inline-block;
+  font-size: 22px;
+  line-height: 1;
+}
+.pd-candy-icon .pd-candy-base { display: block; opacity: .3; filter: grayscale(1); }
+.pd-candy-icon .pd-candy-fill {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(calc((1 - var(--fill)) * 100%) 0 0 0); /* 自下而上填充 */
+}
+.pd-candy-count { font-size: 16px; color: var(--pk-yellow); font-weight: 700; }
+
+/* chips */
+.pd-chips { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pd-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 2px solid var(--border);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.pd-type-chip {
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .35);
+}
+.pd-cost-chip .pokeball--mini { box-shadow: none; }
+
+/* ---------- 详情区块 ---------- */
+.pd-section { grid-column: 2; padding: 16px 18px; }
+.pd-section-title { font-size: 16px; margin-bottom: 12px; display: flex; align-items: baseline; gap: 10px; }
+.pd-bst { font-size: 12.5px; color: var(--text-muted); font-weight: 400; }
+.pd-egg-hint { font-size: 11.5px; color: var(--text-muted); font-weight: 400; }
+
+/* 种族值条 */
+.pd-stat-bars { display: flex; flex-direction: column; gap: 8px; }
+.pd-stat-row { display: flex; align-items: center; gap: 10px; }
+.pd-stat-label { width: 42px; font-size: 13px; color: var(--text-muted); text-align: right; }
+.pd-stat-track {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.pd-stat-fill { height: 100%; border-radius: 5px; transition: width .3s ease; }
+.pd-stat-val { width: 34px; font-size: 13px; font-weight: 600; }
+
+/* 示例个体 */
+.pd-ind-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.pd-ind-nature { font-size: 13.5px; }
+.pd-ind-nature-text { font-weight: 700; color: var(--pk-yellow); }
+.pd-ind-level { font-size: 13px; color: var(--text-muted); }
+.pd-ind-source { font-size: 12px; color: var(--text-muted); }
+.pd-ind-reroll {
+  margin-left: auto;
+  padding: 5px 14px;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color var(--transition), color var(--transition);
+}
+.pd-ind-reroll:hover { border-color: var(--pk-blue); color: var(--pk-blue); }
+
+.pd-iv-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.pd-iv-chip {
+  padding: 2px 9px;
+  border-radius: 6px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.pd-iv-chip.iv-31 { background: rgba(255, 203, 5, .18); border-color: var(--pk-yellow); color: var(--pk-yellow); font-weight: 700; }
+.pd-iv-chip.iv-0 { background: rgba(229, 72, 77, .15); border-color: var(--danger); color: var(--danger); font-weight: 700; }
+
+.pd-actual-stats { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.pd-actual-head, .pd-actual-row {
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr 1fr;
+  gap: 8px;
+  font-size: 13px;
+}
+.pd-actual-head { color: var(--text-muted); font-size: 12px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+.pd-actual-row span:not(:first-child) { text-align: center; }
+
+.pd-friend-row { display: flex; align-items: center; gap: 10px; }
+.pd-friend-label { font-size: 13px; color: var(--text-muted); }
+.pd-friend-bar {
+  flex: 1;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.pd-friend-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 6px;
+  background: linear-gradient(to right, var(--type-psychic), var(--type-fairy));
+  transition: width .3s ease;
+}
+.pd-friend-num { font-size: 12.5px; color: var(--text-muted); min-width: 64px; text-align: right; }
+
+/* 蛋招式 */
+.pd-egg-moves { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.pd-egg-move {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  background: var(--bg-elev);
+  position: relative;
+}
+.pd-egg-move.egg-rare { border-color: var(--pk-yellow); box-shadow: 0 0 10px rgba(255, 203, 5, .18); }
+.pd-egg-move.egg-locked { opacity: .55; }
+.pd-egg-move.egg-empty { grid-column: 1 / -1; color: var(--text-muted); font-size: 13px; border-style: dashed; }
+.pd-egg-rare-badge {
+  position: absolute;
+  top: -9px;
+  right: 10px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--pk-yellow);
+  color: var(--pk-dark);
+  font-size: 11px;
+  font-weight: 700;
+}
+.pd-egg-lock, .pd-egg-unlocked { font-size: 11.5px; color: var(--text-muted); }
+.pd-egg-unlocked { color: var(--ok); }
+.pd-move-power { font-size: 11.5px; color: var(--text-muted); }
+
+@media (max-width: 720px) {
+  .pd-egg-moves { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* 特性与被动 */
+.pd-abilities { list-style: none; display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.pd-abilities li {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  font-size: 13px;
+}
+.pd-abilities li.pd-none { color: var(--text-muted); border-style: dashed; }
+.pd-passive { font-size: 13px; color: var(--text-muted); }
+
+/* 技能池 */
+.pd-learnset summary { cursor: pointer; font-size: 15px; font-weight: 600; padding: 4px 0; }
+.pd-learnset-body { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+.pd-learnset-gen { border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; }
+.pd-learnset-gen summary { cursor: pointer; font-size: 13.5px; color: var(--text-muted); }
+.pd-move-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.pd-learnset-hint { color: var(--text-muted); font-size: 13px; }
+.pd-learnset-all {
+  align-self: flex-start;
+  padding: 6px 16px;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color var(--transition), color var(--transition);
+}
+.pd-learnset-all:hover { border-color: var(--pk-blue); color: var(--pk-blue); }
+.pd-learnset-all:disabled { opacity: .5; cursor: wait; }
+
+/* 招式 chip（属性色） */
+.pd-move-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .35);
+}
+.pd-move-chip em { font-style: normal; font-size: 10.5px; opacity: .85; }
+
+/* ---------- 属性色映射（chip / 结果色点 / 招式 chip 共用） ---------- */
+.pd-type-chip.type--normal, .pd-move-chip.type--normal, .pokedex-result-type.type--normal { background: var(--type-normal); }
+.pd-type-chip.type--fire, .pd-move-chip.type--fire, .pokedex-result-type.type--fire { background: var(--type-fire); }
+.pd-type-chip.type--water, .pd-move-chip.type--water, .pokedex-result-type.type--water { background: var(--type-water); }
+.pd-type-chip.type--electric, .pd-move-chip.type--electric, .pokedex-result-type.type--electric { background: var(--type-electric); }
+.pd-type-chip.type--grass, .pd-move-chip.type--grass, .pokedex-result-type.type--grass { background: var(--type-grass); }
+.pd-type-chip.type--ice, .pd-move-chip.type--ice, .pokedex-result-type.type--ice { background: var(--type-ice); }
+.pd-type-chip.type--fighting, .pd-move-chip.type--fighting, .pokedex-result-type.type--fighting { background: var(--type-fighting); }
+.pd-type-chip.type--poison, .pd-move-chip.type--poison, .pokedex-result-type.type--poison { background: var(--type-poison); }
+.pd-type-chip.type--ground, .pd-move-chip.type--ground, .pokedex-result-type.type--ground { background: var(--type-ground); }
+.pd-type-chip.type--flying, .pd-move-chip.type--flying, .pokedex-result-type.type--flying { background: var(--type-flying); }
+.pd-type-chip.type--psychic, .pd-move-chip.type--psychic, .pokedex-result-type.type--psychic { background: var(--type-psychic); }
+.pd-type-chip.type--bug, .pd-move-chip.type--bug, .pokedex-result-type.type--bug { background: var(--type-bug); }
+.pd-type-chip.type--rock, .pd-move-chip.type--rock, .pokedex-result-type.type--rock { background: var(--type-rock); }
+.pd-type-chip.type--ghost, .pd-move-chip.type--ghost, .pokedex-result-type.type--ghost { background: var(--type-ghost); }
+.pd-type-chip.type--dragon, .pd-move-chip.type--dragon, .pokedex-result-type.type--dragon { background: var(--type-dragon); }
+.pd-type-chip.type--dark, .pd-move-chip.type--dark, .pokedex-result-type.type--dark { background: var(--type-dark); }
+.pd-type-chip.type--steel, .pd-move-chip.type--steel, .pokedex-result-type.type--steel { background: var(--type-steel); }
+.pd-type-chip.type--fairy, .pd-move-chip.type--fairy, .pokedex-result-type.type--fairy { background: var(--type-fairy); }
+
+/* 亮色属性用深色文字保证可读性 */
+.pd-type-chip.type--electric, .pd-type-chip.type--grass, .pd-type-chip.type--ice,
+.pd-type-chip.type--ground, .pd-type-chip.type--flying, .pd-type-chip.type--bug,
+.pd-type-chip.type--fairy, .pd-type-chip.type--normal, .pd-type-chip.type--rock,
+.pd-type-chip.type--steel,
+.pd-move-chip.type--electric, .pd-move-chip.type--grass, .pd-move-chip.type--ice,
+.pd-move-chip.type--ground, .pd-move-chip.type--flying, .pd-move-chip.type--bug,
+.pd-move-chip.type--fairy, .pd-move-chip.type--normal, .pd-move-chip.type--rock,
+.pd-move-chip.type--steel {
+  color: #3a3a3a;
+  text-shadow: none;
+}
+
+/* ---------- 详情面板响应式 ---------- */
+@media (max-width: 760px) {
+  .pd-main { grid-template-columns: 1fr; }
+  .pd-sprite-panel { position: static; }
+  .pd-head, .pd-section { grid-column: 1; }
+}

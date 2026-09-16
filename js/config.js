@@ -39,7 +39,34 @@ PKR.config = {
   MENU_ITEMS: [
     { id: 'new-game', title: '新的冒险', desc: '开启全新的肉鸽之旅', sprite: 4, accent: 'var(--type-fire)' },
     { id: 'continue', title: '继续冒险', desc: '暂无存档', sprite: 143, accent: 'var(--type-normal)', disabled: true },
-    { id: 'pokedex', title: '宝可梦图鉴', desc: '收集并查看宝可梦', sprite: 151, accent: 'var(--type-psychic)', soon: true },
+    { id: 'pokedex', title: '宝可梦图鉴', desc: '收集并查看宝可梦', sprite: 151, accent: 'var(--type-psychic)' },
     { id: 'settings', title: '设置', desc: '声音与显示选项', sprite: 25, accent: 'var(--type-electric)', soon: true }
-  ]
+  ],
+
+  /* ---------- 宝可梦个体系统（二期） ---------- */
+  POKEDEX: {
+    SEARCH_LIMIT: 20,
+    /* 闪光基础概率（待平衡调整）：黄闪 < 蓝闪 < 红闪 */
+    SHINY_RATES: { yellow: 1 / 256, blue: 1 / 2048, red: 1 / 8192 },
+    /* 糖果规则：捕捉+1、孵化+2、Boss×2、黄闪×5、蓝闪×10、红闪×20 */
+    CANDY: { catchBase: 1, hatchBase: 2, bossMult: 2, shinyMult: [1, 5, 10, 20] },
+    FRIENDSHIP_MAX: 255,
+    /* 蛋招式孵化解锁几率：标准池 / 招式 UP 蛋池 */
+    EGG_UNLOCK_RATES: { common: 0.20, rare: 0.05, eggUpCommon: 0.40, eggUpRare: 0.15 },
+    /* 数据文件（classic script 懒加载，file:// 兼容） */
+    DATA_FILES: {
+      core: 'data/pokemon-data.js',
+      moves: 'data/moves-data.js',
+      learnset: g => 'data/learnsets-gen' + g + '.js'
+    },
+    /* 属性中文名 */
+    TYPE_ZH: {
+      normal: '一般', fire: '火', water: '水', electric: '电', grass: '草',
+      ice: '冰', fighting: '格斗', poison: '毒', ground: '地面', flying: '飞行',
+      psychic: '超能力', bug: '虫', rock: '岩石', ghost: '幽灵', dragon: '龙',
+      dark: '恶', steel: '钢', fairy: '妖精'
+    },
+    /* 五维下标中文名（性格修正说明用，下标约定见 js/modules/stats.js） */
+    STAT_ZH: ['物攻', '物防', '特攻', '特防', '速度']
+  }
 };

@@ -134,6 +134,103 @@
       </div>
     </section>
 
+    <!-- ================= 宝可梦图鉴（信息界面） ================= -->
+    <section class="screen" data-screen="pokedex" aria-label="宝可梦图鉴">
+      <div class="screen-deco" aria-hidden="true">
+        <div class="pokeball menu-ball menu-ball--1"></div>
+        <div class="pokeball pokeball--ultra menu-ball menu-ball--2"></div>
+      </div>
+      <div class="pokedex-wrap">
+        <header class="pokedex-header">
+          <button type="button" class="btn-ball btn-back" data-action="back">
+            <span class="pokeball pokeball--mini" aria-hidden="true"></span>返回
+          </button>
+          <h1 class="pokedex-title">宝可梦图鉴</h1>
+        </header>
+
+        <div class="pokedex-search">
+          <input class="input" id="pokedex-search-input" type="search" placeholder="搜索名称或编号（如：皮卡丘 / 25 / pikachu）" autocomplete="off" aria-label="搜索宝可梦">
+          <ul class="pokedex-results" id="pokedex-results" hidden></ul>
+        </div>
+
+        <div class="pokedex-loading" id="pokedex-loading" hidden>
+          <div class="sprite-skeleton pokedex-loading-skeleton" aria-hidden="true"></div>
+          <p>图鉴数据加载中……</p>
+        </div>
+
+        <p class="pokedex-empty" id="pokedex-empty" hidden>搜索宝可梦名称或编号开始查看</p>
+
+        <div class="pokedex-detail" id="pokedex-detail" hidden>
+          <div class="pd-main">
+            <div class="pd-sprite-panel card">
+              <div class="pd-sprite" id="pd-sprite"></div>
+              <span class="pd-shiny-badge" id="pd-shiny-badge" hidden></span>
+              <div class="pd-shiny-tabs" role="tablist" aria-label="形态切换">
+                <button type="button" class="pd-shiny-tab active" data-shiny="0">普通</button>
+                <button type="button" class="pd-shiny-tab" data-shiny="1">黄闪</button>
+                <button type="button" class="pd-shiny-tab" data-shiny="2">蓝闪</button>
+                <button type="button" class="pd-shiny-tab" data-shiny="3">红闪</button>
+              </div>
+              <p class="pd-shiny-note">闪光为 CSS 滤镜占位，后续替换真实素材</p>
+            </div>
+
+            <div class="pd-head">
+              <span class="pd-no">#0000</span>
+              <h2 class="pd-name">
+                <span class="pd-name-text">——</span>
+                <span class="pd-candy-icon" role="img" aria-label="好感度糖果进度" style="--fill: 0">
+                  <span class="pd-candy-base" aria-hidden="true">🍬</span>
+                  <span class="pd-candy-fill" aria-hidden="true">🍬</span>
+                </span>
+                <span class="pd-candy-count">×0</span>
+              </h2>
+              <div class="pd-chips"></div>
+            </div>
+
+            <section class="pd-section card">
+              <h3 class="pd-section-title">种族值 <span class="pd-bst"></span></h3>
+              <div class="pd-stat-bars"></div>
+            </section>
+
+            <section class="pd-section card">
+              <h3 class="pd-section-title">示例个体</h3>
+              <div class="pd-ind-meta">
+                <span class="pd-ind-nature">性格：<span class="pd-ind-nature-text">——</span></span>
+                <span class="pd-ind-level">Lv.50</span>
+                <span class="pd-ind-source"></span>
+                <button type="button" class="pd-ind-reroll">换一只</button>
+              </div>
+              <div class="pd-iv-row"></div>
+              <div class="pd-actual-stats"></div>
+              <div class="pd-friend-row">
+                <span class="pd-friend-label">好感度</span>
+                <div class="pd-friend-bar"><div class="pd-friend-fill"></div></div>
+                <span class="pd-friend-num">0/255</span>
+              </div>
+            </section>
+
+            <section class="pd-section card">
+              <h3 class="pd-section-title">蛋招式 <span class="pd-egg-hint">（孵化时有几率解锁，下局可用）</span></h3>
+              <ul class="pd-egg-moves"></ul>
+            </section>
+
+            <section class="pd-section card">
+              <h3 class="pd-section-title">特性与被动</h3>
+              <ul class="pd-abilities"></ul>
+              <p class="pd-passive"></p>
+            </section>
+
+            <section class="pd-section card">
+              <details class="pd-learnset">
+                <summary>技能池（官方，按世代）</summary>
+                <div class="pd-learnset-body"></div>
+              </details>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <div class="toast-root" id="toast-root" aria-live="polite"></div>
@@ -146,6 +243,12 @@
   <script defer src="js/loading.js"></script>
   <script defer src="js/auth.js"></script>
   <script defer src="js/menu.js"></script>
+  <script defer src="js/modules/stats.js"></script>
+  <script defer src="js/modules/candy.js"></script>
+  <script defer src="js/modules/egg-moves.js"></script>
+  <script defer src="js/modules/individual.js"></script>
+  <script defer src="js/modules/pokedex-store.js"></script>
+  <script defer src="js/pokedex.js"></script>
   <script defer src="js/app.js"></script>
 </body>
 </html>
