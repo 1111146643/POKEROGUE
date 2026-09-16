@@ -34,12 +34,12 @@ PKR.Pokedex = (() => {
   }
 
   function ensureCoreData() {
-    if (PKR.data.species && PKR.data.moves) return Promise.resolve();
+    if (PKR.data && PKR.data.species && PKR.data.moves) return Promise.resolve();
     return ensureDataFile('core').then(() => ensureDataFile('moves'));
   }
 
   function ensureLearnset(gen) {
-    if (PKR.data.learnsets && PKR.data.learnsets[gen]) return Promise.resolve();
+    if (PKR.data && PKR.data.learnsets && PKR.data.learnsets[gen]) return Promise.resolve();
     return ensureDataFile('learnset' + gen);
   }
 
@@ -47,7 +47,7 @@ PKR.Pokedex = (() => {
   function doSearch(input, resultsEl) {
     if (input.dataset.picked === '1') { delete input.dataset.picked; input.value = ''; resultsEl.hidden = true; return; }
     const q = input.value.trim().toLowerCase();
-    if (!q || !PKR.data.species) { resultsEl.hidden = true; return; }
+    if (!q || !PKR.data || !PKR.data.species) { resultsEl.hidden = true; return; }
     const matches = [];
     if (/^\d+$/.test(q)) {
       const hit = PKR.data.species[String(Number(q))];
@@ -422,7 +422,7 @@ PKR.Pokedex = (() => {
     $('.pokedex-results', root).hidden = true;
     $('#pokedex-search-input', root).value = '';
 
-    const ready = !!(PKR.data.species && PKR.data.moves);
+    const ready = !!(PKR.data && PKR.data.species && PKR.data.moves);
     $('.pokedex-loading', root).hidden = ready;
     $('.pokedex-empty', root).hidden = !ready;
     if (ready) return;
